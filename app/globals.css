@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Apple System Colors */
+    --background: 0 0% 98%;
+    /* #FAFAFA - Very light grey, almost white */
+    --foreground: 240 6% 10%;
+    /* #1D1D1F - Apple's near-black */
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
+
+    --primary: 211 100% 50%;
+    /* #0071E3 - Apple Blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 96%;
+    /* #F5F5F7 - Light grey for secondary backgrounds */
+    --secondary-foreground: 240 6% 10%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    /* #86868B - Apple's secondary text */
+
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    /* #FF3B30 - Apple Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 0 0% 100%;
+    --ring: 211 100% 50%;
+
+    --radius: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Apple Dark Mode Colors */
+      --background: 240 6% 10%;
+      /* #1D1D1F - Apple's near-black */
+      --foreground: 0 0% 98%;
+      /* #FAFAFA */
+
+      --card: 240 6% 10%;
+      --card-foreground: 0 0% 98%;
+
+      --popover: 240 6% 10%;
+      --popover-foreground: 0 0% 98%;
+
+      --primary: 211 100% 50%;
+      /* #0A84FF - Apple Dark Mode Blue */
+      --primary-foreground: 0 0% 100%;
+
+      --secondary: 240 4% 16%;
+      /* #2C2C2E - Dark grey for secondary backgrounds */
+      --secondary-foreground: 0 0% 98%;
+
+      --muted: 240 4% 16%;
+      --muted-foreground: 240 5% 65%;
+      /* #86868B - Apple's secondary text (Dark) */
+
+      --accent: 211 100% 50%;
+      --accent-foreground: 0 0% 100%;
+
+      --destructive: 0 84% 60%;
+      /* #FF453A - Apple Dark Mode Red */
+      --destructive-foreground: 0 0% 100%;
+
+      --border: 240 4% 26%;
+      /* #38383A */
+      --input: 240 4% 16%;
+      --ring: 211 100% 50%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-foreground antialiased transition-colors duration-300;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+    /* Light mode: Clean white background */
+    background: #FFFFFF;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      /* Dark mode: Dark grey background */
+      background: #1D1D1F;
+    }
+  }
+}
+
+@layer utilities {
+
+  /* Apple Liquid Glass - Ultra translucent, premium blur with diffraction */
+  .glass {
+    @apply bg-white/60 dark:bg-zinc-900/60 backdrop-blur-3xl border border-white/30 dark:border-white/10 shadow-lg dark:shadow-2xl;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-3xl rounded-3xl transition-all duration-300 relative overflow-hidden;
+
+    /* Base glass with subtle gradient and blue tint for visibility */
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(240, 248, 255, 0.55) 50%,
+        rgba(245, 250, 255, 0.58) 100%);
+
+    /* Multi-layer border for glass edge refraction */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+
+    /* Enhanced depth with multiple shadows and highlights */
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      0 2px 4px rgba(255, 255, 255, 0.5) inset,
+      0 -2px 4px rgba(0, 0, 0, 0.05) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+  }
+
+  /* Subtle top highlight for glass refraction */
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .glass-card {
+      background: linear-gradient(135deg,
+          rgba(39, 39, 42, 0.5) 0%,
+          rgba(30, 35, 45, 0.45) 50%,
+          rgba(35, 38, 48, 0.48) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(255, 255, 255, 0.08) inset,
+        0 -2px 4px rgba(0, 0, 0, 0.3) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    }
+
+    .glass-card::before {
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0) 100%);
+    }
+  }
+
+  .glass-card:hover {
+    @apply transform scale-[1.005];
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(235, 245, 255, 0.65) 50%,
+        rgba(240, 248, 255, 0.68) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.08),
+      0 2px 6px rgba(255, 255, 255, 0.6) inset,
+      0 -2px 6px rgba(0, 0, 0, 0.05) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .glass-card:hover {
+      background: linear-gradient(135deg,
+          rgba(39, 39, 42, 0.6) 0%,
+          rgba(39, 39, 42, 0.5) 50%,
+          rgba(39, 39, 42, 0.55) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        0 2px 6px rgba(255, 255, 255, 0.1) inset,
+        0 -2px 6px rgba(0, 0, 0, 0.4) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+  }
+
+  .glass-button {
+    @apply bg-white/70 dark:bg-zinc-800/70 backdrop-blur-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm hover:bg-white/80 dark:hover:bg-zinc-700/80 hover:shadow-md transition-all active:scale-95 text-zinc-900 dark:text-white;
+  }
+
+  /* Apple Blue Button */
+  .apple-button {
+    @apply bg-[#0071E3] dark:bg-[#0A84FF] text-white font-medium rounded-full hover:bg-[#0077ED] dark:hover:bg-[#0071E3] active:scale-95 transition-all shadow-sm hover:shadow-md;
+  }
+
+  .text-apple-grey {
+    @apply text-[#86868B] dark:text-[#98989D];
+  }
+
+  .bg-apple-grey {
+    @apply bg-[#F5F5F7] dark:bg-[#1C1C1E];
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
