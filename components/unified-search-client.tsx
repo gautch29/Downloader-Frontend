@@ -5,7 +5,7 @@ import { MovieCard } from '@/components/movie-card';
 import { SeriesCard } from '@/components/series-card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Film, Tv, Loader2 } from 'lucide-react';
+import { Search, Film, Tv, Loader2, ExternalLink } from 'lucide-react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { useI18n } from '@/lib/i18n';
 import axios from 'axios';
@@ -167,6 +167,17 @@ export function UnifiedSearchClient({ mode }: UnifiedSearchClientProps) {
                                 )}
                             </Button>
                         </form>
+                        <div className="text-center pb-3 md:pb-6">
+                            <a
+                                href="https://darkiworld15.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 hover:text-[#0071E3] dark:hover:text-[#0A84FF] transition-colors flex items-center justify-center gap-1"
+                            >
+                                {t('download.external_link')}
+                                <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                            </a>
+                        </div>
                     </GlassCard>
                 </div>
 
