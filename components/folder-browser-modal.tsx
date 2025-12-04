@@ -116,15 +116,17 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <Folder className="h-5 w-5 text-[#0071E3] dark:text-[#0A84FF]" />
-                        Browse Folders
-                    </DialogTitle>
-                </DialogHeader>
+            <DialogContent className="sm:max-w-[425px] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-white/20 dark:border-white/10 shadow-2xl dark:shadow-none rounded-3xl p-0 overflow-hidden">
+                <div className="p-6 border-b border-zinc-100 dark:border-zinc-800">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                            <Folder className="h-5 w-5 text-[#0071E3] dark:text-[#0A84FF]" />
+                            Browse Folders
+                        </DialogTitle>
+                    </DialogHeader>
+                </div>
 
-                <div className="space-y-4">
+                <div className="p-6 space-y-4">
                     {/* Current Path Breadcrumb-ish */}
                     <div className="flex items-center gap-2 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-mono overflow-hidden">
                         <span className="truncate direction-rtl text-zinc-600 dark:text-zinc-300">
@@ -227,12 +229,14 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     </div>
                 </div>
 
-                <DialogFooter>
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button onClick={handleSelect} disabled={loading || !currentPath}>
-                        Select This Folder
-                    </Button>
-                </DialogFooter>
+                <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
+                    <DialogFooter>
+                        <Button variant="outline" onClick={onClose} className="rounded-xl">Cancel</Button>
+                        <Button onClick={handleSelect} disabled={loading || !currentPath} className="rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white">
+                            Select This Folder
+                        </Button>
+                    </DialogFooter>
+                </div>
             </DialogContent>
         </Dialog>
     );

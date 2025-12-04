@@ -63,11 +63,6 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
         setIsBrowserOpen(true);
     }
 
-    const selectedShortcut = mode === 'preset'
-        ? (presetValue === 'downloads'
-            ? { id: 'downloads', name: t('download.path.default'), path: '' }
-            : shortcuts.find(s => s.id === presetValue))
-        : null;
 
     return (
         <div className="space-y-2">
