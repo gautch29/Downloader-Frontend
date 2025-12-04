@@ -87,7 +87,7 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
                         onValueChange={handleValueChange}
                     >
                         <SelectTrigger className="h-12 bg-white/80 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 focus:ring-[#0071E3]/20 dark:focus:ring-[#0A84FF]/20 rounded-xl text-zinc-900 dark:text-white shadow-sm">
-                            <SelectValue placeholder={t('download.path_placeholder')}>
+                            <div className="flex-1 text-left flex items-center">
                                 {mode === 'custom' ? (
                                     <div className="flex items-center gap-2">
                                         <FolderInput className="h-4 w-4" />
@@ -99,9 +99,13 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
                                         <span className="truncate max-w-[200px]">{selectedShortcut.name}</span>
                                     </div>
                                 ) : (
-                                    <span>{t('download.path_placeholder')}</span>
+                                    <span className="text-zinc-500 dark:text-zinc-400">{t('download.path_placeholder')}</span>
                                 )}
-                            </SelectValue>
+                            </div>
+                            {/* Hidden SelectValue for accessibility/form data if needed, though we handle form data manually */}
+                            <span className="sr-only">
+                                <SelectValue placeholder={t('download.path_placeholder')} />
+                            </span>
                         </SelectTrigger>
                         <SelectContent className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl">
                             <SelectItem value="downloads" textValue={t('download.path.default')} className="text-zinc-900 dark:text-white focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-900 dark:focus:text-white cursor-pointer rounded-lg my-1">
