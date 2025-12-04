@@ -97,7 +97,7 @@ export function PathShortcutsModal({ shortcuts: initialShortcuts }: PathShortcut
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => handleDelete(shortcut.id)}
+                                            onClick={() => handleDelete(shortcut.name)}
                                             className="h-8 w-8 text-zinc-400 dark:text-zinc-500 hover:text-[#FF3B30] dark:hover:text-[#FF453A] hover:bg-[#FF3B30]/10 dark:hover:bg-[#FF453A]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
                                             disabled={shortcut.id === 'downloads'}
                                         >
