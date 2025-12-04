@@ -126,45 +126,42 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     </DialogHeader>
                 </div>
 
-                <div className="p-6 space-y-4">
-                    {/* Current Path Breadcrumb-ish */}
-                    <div className="flex items-center gap-2 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-mono overflow-hidden">
-                        <span className="truncate direction-rtl text-zinc-600 dark:text-zinc-300">
-                            {currentPath || 'Select a root path first'}
-                        </span>
-                    </div>
-
-                    {/* Navigation Controls */}
-                    <div className="flex items-center justify-between">
+                <div className="flex-1 overflow-hidden flex flex-col min-h-[400px]">
+                    {/* Navigation Bar */}
+                    <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3 bg-zinc-50/50 dark:bg-zinc-900/50">
                         <Button
                             variant="outline"
-                            size="sm"
+                            size="icon"
                             onClick={handleGoUp}
                             disabled={history.length === 0 || loading}
-                            className="gap-1"
+                            className="h-9 w-9 shrink-0 rounded-lg"
                         >
                             <CornerLeftUp className="h-4 w-4" />
-                            Back
                         </Button>
+
+                        <div className="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm font-mono overflow-hidden flex items-center h-9">
+                            <span className="truncate direction-rtl text-zinc-600 dark:text-zinc-300 w-full">
+                                {currentPath || 'Select a root path first'}
+                            </span>
+                        </div>
 
                         <Button
                             variant="ghost"
-                            size="sm"
+                            size="icon"
                             onClick={() => setIsCreatingFolder(!isCreatingFolder)}
-                            className="gap-1 text-[#0071E3] dark:text-[#0A84FF]"
+                            className={cn("h-9 w-9 shrink-0 rounded-lg", isCreatingFolder && "bg-zinc-100 dark:bg-zinc-800")}
                         >
-                            <FolderPlus className="h-4 w-4" />
-                            New Folder
+                            <FolderPlus className="h-4 w-4 text-[#0071E3] dark:text-[#0A84FF]" />
                         </Button>
                     </div>
 
-                    {/* New Folder Input */}
+                    {/* New Folder Input Area */}
                     {isCreatingFolder && (
-                        <div className="flex items-center gap-2 animate-fade-in-up">
+                        <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center gap-2 animate-in slide-in-from-top-2">
                             <Input
                                 value={newFolderName}
                                 onChange={(e) => setNewFolderName(e.target.value)}
-                                placeholder="Folder name"
+                                placeholder="New folder name"
                                 className="h-9 text-sm"
                                 autoFocus
                                 onKeyDown={(e) => e.key === 'Enter' && handleCreateFolder()}
@@ -173,15 +170,15 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                                 size="sm"
                                 onClick={handleCreateFolder}
                                 disabled={creatingLoading || !newFolderName.trim()}
-                                className="h-9 w-9 p-0 shrink-0 bg-[#0071E3] hover:bg-[#0077ED]"
+                                className="h-9 px-3 bg-[#0071E3] hover:bg-[#0077ED]"
                             >
-                                {creatingLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                                {creatingLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create"}
                             </Button>
                             <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => setIsCreatingFolder(false)}
-                                className="h-9 w-9 p-0 shrink-0"
+                                className="h-9 w-9 p-0"
                             >
                                 <X className="h-4 w-4" />
                             </Button>
@@ -189,41 +186,42 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     )}
 
                     {/* Folder List */}
-                    <div className="border rounded-lg h-[300px] relative bg-white dark:bg-zinc-900 overflow-hidden">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
                         {loading ? (
-                            <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-full flex items-center justify-center">
                                 <Loader2 className="h-8 w-8 animate-spin text-[#0071E3]" />
                             </div>
                         ) : error ? (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                            <div className="h-full flex flex-col items-center justify-center p-4 text-center">
                                 <p className="text-red-500 text-sm mb-2">{error}</p>
                                 <Button variant="outline" size="sm" onClick={() => loadFolders(currentPath)}>
                                     Retry
                                 </Button>
                             </div>
                         ) : folders.length === 0 ? (
-                            <div className="absolute inset-0 flex items-center justify-center text-zinc-400 text-sm">
-                                No subfolders found
+                            <div className="h-full flex flex-col items-center justify-center text-zinc-400 text-sm gap-2">
+                                <Folder className="h-8 w-8 opacity-20" />
+                                <p>No subfolders found</p>
                             </div>
                         ) : (
-                            <div className="h-full overflow-y-auto custom-scrollbar">
-                                <div className="p-2 space-y-1">
-                                    {folders.map((folder) => (
-                                        <button
-                                            key={folder.path}
-                                            onClick={() => handleNavigate(folder.path)}
-                                            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors group text-left"
-                                        >
-                                            <div className="flex items-center gap-3 overflow-hidden">
-                                                <Folder className="h-5 w-5 text-zinc-400 group-hover:text-[#0071E3] transition-colors flex-shrink-0" />
-                                                <span className="text-sm font-medium truncate text-zinc-700 dark:text-zinc-200">
-                                                    {folder.name}
-                                                </span>
+                            <div className="space-y-1">
+                                {folders.map((folder) => (
+                                    <button
+                                        key={folder.path}
+                                        onClick={() => handleNavigate(folder.path)}
+                                        className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all group text-left border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
+                                    >
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="h-8 w-8 rounded-lg bg-[#0071E3]/10 dark:bg-[#0A84FF]/10 flex items-center justify-center flex-shrink-0">
+                                                <Folder className="h-4 w-4 text-[#0071E3] dark:text-[#0A84FF]" />
                                             </div>
-                                            <ChevronRight className="h-4 w-4 text-zinc-300 group-hover:text-zinc-500" />
-                                        </button>
-                                    ))}
-                                </div>
+                                            <span className="text-sm font-medium truncate text-zinc-700 dark:text-zinc-200">
+                                                {folder.name}
+                                            </span>
+                                        </div>
+                                        <ChevronRight className="h-4 w-4 text-zinc-300 group-hover:text-zinc-500" />
+                                    </button>
+                                ))}
                             </div>
                         )}
                     </div>
