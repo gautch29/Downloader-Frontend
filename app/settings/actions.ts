@@ -55,13 +55,28 @@ export async function updateSettingsAction(formData: FormData) {
         const cookieStore = await cookies();
         const sessionId = cookieStore.get('session_id')?.value;
 
+        // First fetch current settings to get the paths
+        const currentSettingsResponse = await fetch(`${API_URL}/settings`, {
+            headers: { 'Cookie': `session_id=${sessionId}` }
+        });
+
+        let paths = [];
+        if (currentSettingsResponse.ok) {
+            const data = await currentSettingsResponse.json();
+            paths = data.paths || [];
+        }
+
         const response = await fetch(`${API_URL}/settings`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': `session_id=${sessionId}`
             },
-            body: JSON.stringify({ plexUrl, plexToken })
+            body: JSON.stringify({
+                plexUrl,
+                plexToken,
+                paths
+            })
         });
 
         if (!response.ok) {
@@ -87,11 +102,13 @@ export async function getSettingsAction() {
         if (!response.ok) return null;
 
         const data = await response.json();
-        // Return raw settings for the form (including token if needed, but usually we don't send token back to client for security unless necessary for edit)
-        // The previous implementation returned { plexUrl, plexToken }
+
         return {
-            plexUrl: data.plexUrl,
-            plexToken: data.plexToken
+            settings: {
+                plexUrl: data.settings?.plexUrl,
+                plexToken: data.settings?.plexToken
+            },
+            paths: data.paths || []
         };
     } catch (error) {
         return null;

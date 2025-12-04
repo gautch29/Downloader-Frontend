@@ -15,22 +15,23 @@ export async function GET(request: NextRequest) {
             }
             // If 404 (no settings yet), return default
             if (response.status === 404) {
-                return NextResponse.json({ settings: { plexUrl: '', plexConfigured: false } });
+                return NextResponse.json({ settings: { plexUrl: '', plexConfigured: false }, paths: [] });
             }
             return NextResponse.json({ error: 'Failed to fetch settings' }, { status: response.status });
         }
 
         const data = await response.json();
-        // Swift returns Setting object directly. 
-        // We want to mask token.
-        // Swift Setting: { id, plexUrl, plexToken, updatedAt }
+        // Swift returns { settings: {...}, paths: [...] }
 
         const safeSettings = {
-            plexUrl: data.plexUrl || '',
-            plexConfigured: !!(data.plexUrl && data.plexToken)
+            plexUrl: data.settings?.plexUrl || '',
+            plexConfigured: !!(data.settings?.plexUrl && data.settings?.plexToken)
         };
 
-        return NextResponse.json({ settings: safeSettings });
+        return NextResponse.json({
+            settings: safeSettings,
+            paths: data.paths || []
+        });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

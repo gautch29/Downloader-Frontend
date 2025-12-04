@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { changePasswordAction, getSettingsAction, updateSettingsAction } from './actions';
+import { addPathShortcutAction, deletePathShortcutAction } from '../paths/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Lock, ArrowLeft } from 'lucide-react';
+import { Lock, ArrowLeft, Folder, Trash2, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { GlassCard } from '@/components/ui/glass-card';
 import { useI18n } from '@/lib/i18n';
+import { FolderBrowserModal } from '@/components/folder-browser-modal';
 
 export default function SettingsPage() {
     const [error, setError] = useState<string | null>(null);
@@ -19,14 +21,24 @@ export default function SettingsPage() {
     const [plexLoading, setPlexLoading] = useState(false);
     const [plexSettings, setPlexSettings] = useState<{ plexUrl: string; plexToken: string } | null>(null);
 
+    const [paths, setPaths] = useState<any[]>([]);
+    const [isBrowserOpen, setIsBrowserOpen] = useState(false);
+    const [newPathName, setNewPathName] = useState('');
+    const [selectedPath, setSelectedPath] = useState('');
+
     // Fetch settings on mount
     useEffect(() => {
-        getSettingsAction().then((settings) => {
-            if (settings) {
-                setPlexSettings({
-                    plexUrl: settings.plexUrl || '',
-                    plexToken: settings.plexToken || ''
-                });
+        getSettingsAction().then((data) => {
+            if (data) {
+                if (data.settings) {
+                    setPlexSettings({
+                        plexUrl: data.settings.plexUrl || '',
+                        plexToken: data.settings.plexToken || ''
+                    });
+                }
+                if (data.paths) {
+                    setPaths(data.paths);
+                }
             }
         });
     }, []);
@@ -62,6 +74,35 @@ export default function SettingsPage() {
             setLoading(false);
             // Clear form
             (document.getElementById('password-form') as HTMLFormElement)?.reset();
+        }
+    }
+
+    async function handleDeletePath(name: string) {
+        try {
+            await deletePathShortcutAction(name);
+            const data = await getSettingsAction();
+            if (data?.paths) setPaths(data.paths);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function handleAddPath() {
+        if (!newPathName || !selectedPath) return;
+        try {
+            const formData = new FormData();
+            formData.append('name', newPathName);
+            formData.append('path', selectedPath);
+            await addPathShortcutAction(formData);
+
+            const data = await getSettingsAction();
+            if (data?.paths) setPaths(data.paths);
+
+            setNewPathName('');
+            setSelectedPath('');
+            setIsBrowserOpen(false);
+        } catch (err) {
+            console.error(err);
         }
     }
 
@@ -140,6 +181,67 @@ export default function SettingsPage() {
                         {plexLoading ? 'Saving...' : t('settings.plex.save')}
                     </Button>
                 </form>
+            </GlassCard>
+
+            <GlassCard className="mb-8">
+                <h1 className="text-2xl font-bold text-zinc-900 dark:text-white mb-8 flex items-center gap-3">
+                    <span className="h-8 w-1 rounded-full bg-[#0071E3] dark:bg-[#0A84FF]"></span>
+                    Download Paths
+                </h1>
+
+                <div className="space-y-4">
+                    {paths.map((path) => (
+                        <div key={path.name} className="flex items-center justify-between p-4 rounded-xl bg-white/50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+                            <div className="flex items-center gap-3">
+                                <Folder className="h-5 w-5 text-[#0071E3] dark:text-[#0A84FF]" />
+                                <div>
+                                    <p className="font-medium text-zinc-900 dark:text-white">{path.name}</p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{path.path}</p>
+                                </div>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeletePath(path.name)}
+                                className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            >
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    ))}
+
+                    <div className="flex gap-2">
+                        <Input
+                            placeholder="Name (e.g. Movies)"
+                            value={newPathName}
+                            onChange={(e) => setNewPathName(e.target.value)}
+                            className="flex-1 h-10 bg-white/80 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 rounded-lg"
+                        />
+                        <div className="flex-1 relative">
+                            <Input
+                                placeholder="Path"
+                                value={selectedPath}
+                                readOnly
+                                onClick={() => setIsBrowserOpen(true)}
+                                className="h-10 bg-white/80 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 rounded-lg cursor-pointer"
+                            />
+                        </div>
+                        <Button
+                            onClick={handleAddPath}
+                            disabled={!newPathName || !selectedPath}
+                            className="h-10 bg-[#0071E3] dark:bg-[#0A84FF] text-white rounded-lg"
+                        >
+                            <Plus className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+
+                <FolderBrowserModal
+                    isOpen={isBrowserOpen}
+                    onClose={() => setIsBrowserOpen(false)}
+                    onSelect={setSelectedPath}
+                    initialPath={selectedPath || '/'}
+                />
             </GlassCard>
 
             <GlassCard>
