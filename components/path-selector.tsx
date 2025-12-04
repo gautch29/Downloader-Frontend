@@ -33,7 +33,8 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
     // If custom, use customPath
     const getEffectivePath = () => {
         if (mode === 'custom') return customPath;
-        const shortcut = shortcuts.find(s => s.id === presetValue);
+        if (presetValue === 'downloads') return '';
+        const shortcut = shortcuts.find(s => String(s.id) === String(presetValue));
         return shortcut ? shortcut.path : '';
     };
 
