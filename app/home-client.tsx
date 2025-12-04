@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { DownloadCard } from '@/components/download-card';
 import { PathSelector } from '@/components/path-selector';
 import { AutoRefresh } from '@/components/auto-refresh';
-import { Plus, Download, Sparkles, HardDrive } from 'lucide-react';
+import { Plus, Download, Sparkles, HardDrive, ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { useI18n } from '@/lib/i18n';
@@ -117,6 +117,18 @@ export function HomeClient({ downloads, pathShortcuts }: HomeClientProps) {
                                 {t('download.button')}
                             </Button>
                         </form>
+
+                        <div className="mt-4 text-center">
+                            <a
+                                href="https://darkiworld15.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 hover:text-[#0071E3] dark:hover:text-[#0A84FF] transition-colors flex items-center justify-center gap-1"
+                            >
+                                {t('download.external_link')}
+                                <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                            </a>
+                        </div>
                     </div>
                 </GlassCard>
             </section>
