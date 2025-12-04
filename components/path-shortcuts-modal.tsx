@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Settings, Plus, Trash2 } from 'lucide-react';
+import { Settings, Plus, Trash2, Folder } from 'lucide-react';
 import { addPathShortcutAction, deletePathShortcutAction, getPathShortcutsAction } from '@/app/paths/actions';
 import { PathShortcut } from './path-selector';
 import { useI18n } from '@/lib/i18n';
@@ -17,6 +18,8 @@ export function PathShortcutsModal({ shortcuts: initialShortcuts }: PathShortcut
     const { t } = useI18n();
     const [open, setOpen] = useState(false);
     const [shortcuts, setShortcuts] = useState(initialShortcuts);
+
+    const router = useRouter();
 
     // Refresh shortcuts when modal opens
     useEffect(() => {
@@ -32,6 +35,7 @@ export function PathShortcutsModal({ shortcuts: initialShortcuts }: PathShortcut
         setShortcuts(updated);
         // Clear form
         (document.querySelector('form[data-path-form]') as HTMLFormElement)?.reset();
+        router.refresh();
     }
 
     async function handleDelete(id: string) {
@@ -40,6 +44,7 @@ export function PathShortcutsModal({ shortcuts: initialShortcuts }: PathShortcut
             // Refresh the list immediately
             const updated = await getPathShortcutsAction();
             setShortcuts(updated);
+            router.refresh();
         }
     }
 
@@ -85,7 +90,7 @@ export function PathShortcutsModal({ shortcuts: initialShortcuts }: PathShortcut
                                     >
                                         <div className="flex items-center gap-3 overflow-hidden">
                                             <div className="h-8 w-8 rounded-lg bg-white dark:bg-zinc-700 flex items-center justify-center text-zinc-400 dark:text-zinc-300 shadow-sm">
-                                                <Plus className="h-4 w-4" />
+                                                <Folder className="h-4 w-4" />
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <p className="font-medium text-sm text-zinc-700 dark:text-zinc-200 truncate">{shortcut.name}</p>
