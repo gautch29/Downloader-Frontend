@@ -45,7 +45,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`/api/paths/browse?path=${encodeURIComponent(path)}`);
+            const res = await fetch(`/api/paths/browse?path=${encodeURIComponent(path)}`, { cache: 'no-store' });
             const data = await res.json();
 
             if (!res.ok) {

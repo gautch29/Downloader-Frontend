@@ -66,7 +66,7 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
     const selectedShortcut = mode === 'preset'
         ? (presetValue === 'downloads'
             ? { id: 'downloads', name: t('download.path.default'), path: '' }
-            : shortcuts.find(s => s.id === presetValue))
+            : shortcuts.find(s => String(s.id) === String(presetValue)))
         : null;
 
     return (
@@ -102,10 +102,6 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
                                     <span className="text-zinc-500 dark:text-zinc-400">{t('download.path_placeholder')}</span>
                                 )}
                             </div>
-                            {/* Hidden SelectValue for accessibility/form data if needed, though we handle form data manually */}
-                            <span className="sr-only">
-                                <SelectValue placeholder={t('download.path_placeholder')} />
-                            </span>
                         </SelectTrigger>
                         <SelectContent className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl">
                             <SelectItem value="downloads" textValue={t('download.path.default')} className="text-zinc-900 dark:text-white focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-900 dark:focus:text-white cursor-pointer rounded-lg my-1">
@@ -162,6 +158,7 @@ export function PathSelector({ shortcuts }: PathSelectorProps) {
             <input type="hidden" name="targetPath" value={effectivePath} />
 
             <FolderBrowserModal
+                key={effectivePath}
                 isOpen={isBrowserOpen}
                 onClose={() => setIsBrowserOpen(false)}
                 onSelect={handleBrowseSelect}
