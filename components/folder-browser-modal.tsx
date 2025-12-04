@@ -116,7 +116,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-white/20 dark:border-white/10 shadow-2xl dark:shadow-none rounded-3xl p-0 overflow-hidden">
+            <DialogContent className="sm:max-w-[600px] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-white/20 dark:border-white/10 shadow-2xl dark:shadow-none rounded-3xl p-0 overflow-hidden">
                 <div className="p-6 border-b border-zinc-100 dark:border-zinc-800">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
@@ -134,13 +134,13 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                             size="icon"
                             onClick={handleGoUp}
                             disabled={history.length === 0 || loading}
-                            className="h-9 w-9 shrink-0 rounded-lg"
+                            className={cn("h-9 w-9 shrink-0 rounded-lg", history.length === 0 && "opacity-0 pointer-events-none")}
                         >
                             <CornerLeftUp className="h-4 w-4" />
                         </Button>
 
                         <div className="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm font-mono overflow-hidden flex items-center h-9">
-                            <span className="truncate direction-rtl text-zinc-600 dark:text-zinc-300 w-full">
+                            <span className="truncate direction-rtl text-zinc-600 dark:text-zinc-300 w-full" title={currentPath}>
                                 {currentPath || 'Select a root path first'}
                             </span>
                         </div>
@@ -211,15 +211,15 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                                         onClick={() => handleNavigate(folder.path)}
                                         className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all group text-left border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
                                     >
-                                        <div className="flex items-center gap-3 overflow-hidden">
+                                        <div className="flex items-center gap-3 overflow-hidden flex-1 min-w-0">
                                             <div className="h-8 w-8 rounded-lg bg-[#0071E3]/10 dark:bg-[#0A84FF]/10 flex items-center justify-center flex-shrink-0">
                                                 <Folder className="h-4 w-4 text-[#0071E3] dark:text-[#0A84FF]" />
                                             </div>
-                                            <span className="text-sm font-medium truncate text-zinc-700 dark:text-zinc-200">
+                                            <span className="text-sm font-medium truncate text-zinc-700 dark:text-zinc-200 max-w-[300px]" title={folder.name}>
                                                 {folder.name}
                                             </span>
                                         </div>
-                                        <ChevronRight className="h-4 w-4 text-zinc-300 group-hover:text-zinc-500" />
+                                        <ChevronRight className="h-4 w-4 text-zinc-300 group-hover:text-zinc-500 flex-shrink-0" />
                                     </button>
                                 ))}
                             </div>
