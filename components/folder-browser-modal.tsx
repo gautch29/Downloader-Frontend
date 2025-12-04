@@ -126,7 +126,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     </DialogHeader>
                 </div>
 
-                <div className="flex-1 overflow-hidden flex flex-col min-h-[400px]">
+                <div className="p-0">
                     {/* Navigation Bar */}
                     <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3 bg-zinc-50/50 dark:bg-zinc-900/50">
                         <Button
@@ -186,7 +186,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     )}
 
                     {/* Folder List */}
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                    <div className="h-[350px] overflow-y-auto custom-scrollbar p-2">
                         {loading ? (
                             <div className="h-full flex items-center justify-center">
                                 <Loader2 className="h-8 w-8 animate-spin text-[#0071E3]" />
