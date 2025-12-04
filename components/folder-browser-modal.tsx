@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Folder, ChevronRight, CornerLeftUp, Loader2, FolderPlus, Plus, X, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -188,7 +187,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                     )}
 
                     {/* Folder List */}
-                    <div className="border rounded-lg min-h-[300px] relative bg-white dark:bg-zinc-900">
+                    <div className="border rounded-lg h-[300px] relative bg-white dark:bg-zinc-900 overflow-hidden">
                         {loading ? (
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <Loader2 className="h-8 w-8 animate-spin text-[#0071E3]" />
@@ -205,7 +204,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                                 No subfolders found
                             </div>
                         ) : (
-                            <ScrollArea className="h-[300px]">
+                            <div className="h-full overflow-y-auto custom-scrollbar">
                                 <div className="p-2 space-y-1">
                                     {folders.map((folder) => (
                                         <button
@@ -223,7 +222,7 @@ export function FolderBrowserModal({ isOpen, onClose, onSelect, initialPath }: F
                                         </button>
                                     ))}
                                 </div>
-                            </ScrollArea>
+                            </div>
                         )}
                     </div>
                 </div>
